@@ -1,7 +1,7 @@
 {
   window.addEventListener('click',()=>{
     const startDisplay = document.querySelector('.startDisplay');
-    startDisplay.classList.remove();
+    startDisplay.classList.remove('startDisplay');
     startDisplay.classList.add('startDisplayNone');
     const tipingGame = document.querySelector('.tipingGame');
     tipingGame.classList.remove();
@@ -24,23 +24,32 @@
     {english:'sukueaenikkusu', japanese:'スクエアエニックス',},
   ];
 
-  let answerNo = 0;
 
-    const tipingSistem = (digitNo,questonD) =>{
-      checkSpell();
+
+    function tipingSistem(corectNo){
+      if(corectNo < quesitonNo){
+        renderQuestionNo(corectNo);
+        checkSpell();
+      }else{
+        return;
+      }
     }
 
-    tipingSistem();
 
 
   function renderDocument(){
-    let randam = Math.floor(Math.random(0) * tipingDocument.length);
+    let randam = Math.floor(Math.random() * tipingDocument.length);
     document.querySelector('#DocumentJapanese').innerHTML = tipingDocument[randam].japanese;
     document.querySelector('#DocumentEnglish').innerHTML = tipingDocument[randam].english;
     console.log(randam);
     console.log(tipingDocument.length);
     return randam;
   };
+
+  function renderQuestionNo(corectNo){
+    const quesitonDigit = document.querySelector('.tipingGame h2');
+    quesitonDigit.textContent =`${corectNo + 1}問目`;
+  }
   
   function editSpell(){
     let randam = renderDocument();
@@ -48,28 +57,50 @@
     let documentSlice = [];
     for(let i = 0; i < tipingDocument[randam].english.length; i++){
       documentSlice[i] = document[i].slice(0,tipingDocument[randam].english.length);
+      // document[i].classList.add = `digit${i}`;
     }
     console.log(documentSlice);
     return documentSlice;
   }
 
+  let corectNo = 0;
+  let digitNo = 0;
+
   function checkSpell(){
-    let digitNo = 0;
+    // let corectNo = 0;
     let questonD = editSpell();
-    window.addEventListener('keydown',function(event){
-      if(questonD[digitNo] === event.key){
-        console.log("corect");
-        digitNo++;
-      }else{
-        console.log('wrong');
-      }
+      window.addEventListener('keydown',function(event){
+        if(questonD[digitNo] === event.key){
+          console.log("corect");
+          digitNo++;
+          if(digitNo === questonD.length){
+            console.log('All corect');
+            digitNo = 0;
+            corectNo++;
+            questonD = '';
+            tipingSistem(corectNo);
+          }
+        }else if(questonD[digitNo] !== event.key){
+          console.log('wrong');
+        }
+      });
+  };
+
+  function keydownHolder(event){
+    if(questonD[digitNo] === event.key){
+      console.log("corect");
+      digitNo++;
       if(digitNo === questonD.length){
         console.log('All corect');
         digitNo = 0;
+        corectNo++;
+        questonD = '';
+        tipingSistem(corectNo);
       }
-    });
-    return;
-  };
-  
+    }else if(questonD[digitNo] !== event.key){
+      console.log('wrong');
+    }
+  }
+  checkSpell();
  
 }
