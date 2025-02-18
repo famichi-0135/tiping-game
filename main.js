@@ -12,7 +12,11 @@
   function startToTaiping(){
     const sbutton = document.querySelector('#startDisplay > button');
     sbutton.addEventListener('click',() =>{
-      checkSpell()
+    //checkSpell()
+       corectNo = 0;
+       digitNo = 0;
+       questonD = '';
+      tipingSistem(corectNo);
       startToTaipingGame();
     });
   }
@@ -51,9 +55,9 @@
         checkSpell();
       }else{
         tipingGameToFinishDisplay();
-       corectNo = 0;
-       digitNo = 0;
-       questonD = '';
+      //  corectNo = 0;
+      //  digitNo = 0;
+      //  questonD = '';
        switchFinishButton();
         // return;
       }
@@ -150,6 +154,7 @@
           span.remove();
         }
         questonD = '';
+
         tipingSistem(corectNo);
       }
     }else if(questonD[digitNo] !== event.key){
